@@ -1,43 +1,899 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CUSTOMER PROBLEM TEMPLATE</title>
-<style>
-body {
- background-color: lightgray;
- font-size: 15px;
- font-family: Sans-Serif;
- margin: 0;
- padding: 30px 20px;
-}
-h1 {
- font-family: cursive;
- color: blue;
-}
-h2 {
- font-family: cursive;
- color: blue;
-}
-img {
- max-width: 100%;
- height: auto;
- display: block;
- margin: 20px auto;
- border-radius: 8px;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LedgerPal — Modern Bookkeeping for Traders & Business Owners</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-main: #07090e;
+            --bg-card: rgba(18, 24, 38, 0.75);
+            --bg-card-hover: rgba(26, 34, 53, 0.85);
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(52, 211, 153, 0.35);
+            
+            --emerald-primary: #10b981;
+            --emerald-glow: rgba(16, 185, 129, 0.25);
+            --emerald-light: #34d399;
+            --amber-accent: #f59e0b;
+            --cyan-accent: #06b6d4;
+            
+            --text-heading: #ffffff;
+            --text-body: #94a3b8;
+            --text-muted: #64748b;
+            --text-bright: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-body);
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ambient background glow */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, rgba(6, 182, 212, 0.05) 50%, transparent 80%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -150px;
+            right: -100px;
+            width: 600px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Top Navigation Header */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            background: rgba(7, 9, 14, 0.85);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-wrap {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            box-shadow: 0 4px 14px var(--emerald-glow);
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: #ffffff;
+        }
+
+        .brand-name span {
+            color: var(--emerald-light);
+        }
+
+        .brand-tag {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--emerald-light);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .nav-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            border-radius: 100px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--emerald-light);
+        }
+
+        .nav-badge .pulse-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--emerald-light);
+            box-shadow: 0 0 10px var(--emerald-light);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.7; }
+            50% { transform: scale(1.3); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.7; }
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 64px 24px 40px;
+            text-align: center;
+        }
+
+        .pill-category {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-bright);
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.4rem, 5vw, 4rem);
+            font-weight: 800;
+            line-height: 1.15;
+            color: var(--text-heading);
+            letter-spacing: -0.03em;
+            max-width: 880px;
+            margin: 0 auto 20px;
+        }
+
+        .hero h1 .highlight {
+            background: linear-gradient(120deg, #34d399, #10b981, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-lead {
+            font-size: clamp(1.05rem, 2vw, 1.25rem);
+            color: var(--text-body);
+            max-width: 720px;
+            margin: 0 auto 36px;
+            font-weight: 400;
+        }
+
+        /* Hero Feature Pills */
+        .feature-chips {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 50px;
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            background: rgba(18, 24, 38, 0.7);
+            border: 1px solid var(--border-subtle);
+            border-radius: 30px;
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: var(--text-bright);
+            backdrop-filter: blur(8px);
+        }
+
+        .chip svg {
+            color: var(--emerald-light);
+        }
+
+        /* Showcase Banner Image */
+        .hero-image-card {
+            max-width: 1060px;
+            margin: 0 auto 80px;
+            position: relative;
+            padding: 8px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, rgba(52, 211, 153, 0.25), rgba(255, 255, 255, 0.05), rgba(6, 182, 212, 0.2));
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 40px rgba(16, 185, 129, 0.15);
+        }
+
+        .hero-image-inner {
+            border-radius: 18px;
+            overflow: hidden;
+            background: #0d121f;
+            position: relative;
+        }
+
+        .hero-image-inner img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .hero-image-card:hover .hero-image-inner img {
+            transform: scale(1.02);
+        }
+
+        /* Main Content Layout */
+        main {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px 80px;
+        }
+
+        /* Section Headings */
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-tag {
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--emerald-light);
+            margin-bottom: 8px;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+            color: var(--text-heading);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        /* Problem & Opportunity Canvas (The Template) */
+        .canvas-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+            margin-bottom: 80px;
+        }
+
+        .canvas-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            padding: 32px;
+            backdrop-filter: blur(14px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .canvas-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(52, 211, 153, 0.5), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .canvas-card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border-hover);
+            transform: translateY(-4px);
+            box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.5);
+        }
+
+        .canvas-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+
+        .card-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .icon-target {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--amber-accent);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .icon-pain {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .icon-solution {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--emerald-light);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .icon-power {
+            background: rgba(6, 182, 212, 0.15);
+            color: var(--cyan-accent);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+        }
+
+        .card-meta {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+        }
+
+        .card-heading {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            letter-spacing: -0.01em;
+        }
+
+        .card-body {
+            font-size: 1rem;
+            color: var(--text-bright);
+            line-height: 1.65;
+        }
+
+        .col-6 { grid-column: span 6; }
+        .col-12 { grid-column: span 12; }
+        .col-4 { grid-column: span 4; }
+
+        @media (max-width: 900px) {
+            .col-6, .col-4 { grid-column: span 12; }
+        }
+
+        /* Comparison Section (Unlike vs LedgerPal) */
+        .comparison-section {
+            margin-bottom: 80px;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .comparison-grid { grid-template-columns: 1fr; }
+        }
+
+        .comparison-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            padding: 32px;
+            backdrop-filter: blur(14px);
+        }
+
+        .comparison-card.legacy {
+            border-color: rgba(239, 68, 68, 0.2);
+            background: rgba(239, 68, 68, 0.03);
+        }
+
+        .comparison-card.ledgerpal {
+            border-color: rgba(16, 185, 129, 0.35);
+            background: rgba(16, 185, 129, 0.05);
+            box-shadow: 0 10px 30px -10px rgba(16, 185, 129, 0.15);
+        }
+
+        .comparison-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .legacy .comparison-title { color: #f87171; }
+        .ledgerpal .comparison-title { color: var(--emerald-light); }
+
+        .comparison-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .comparison-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 0.95rem;
+            color: var(--text-bright);
+        }
+
+        .comparison-list li .bullet-icon {
+            flex-shrink: 0;
+            margin-top: 3px;
+        }
+
+        /* Metrics / Success Criteria */
+        .metrics-banner {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(6, 182, 212, 0.08), rgba(18, 24, 38, 0.9));
+            border: 1px solid rgba(52, 211, 153, 0.3);
+            border-radius: 24px;
+            padding: 44px 36px;
+            margin-bottom: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metrics-headline {
+            text-align: center;
+            max-width: 680px;
+            margin: 0 auto 36px;
+        }
+
+        .metrics-headline h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .metrics-headline p {
+            color: var(--text-body);
+            font-size: 0.95rem;
+        }
+
+        .metrics-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .metrics-row { grid-template-columns: 1fr; }
+        }
+
+        .metric-box {
+            background: rgba(10, 14, 23, 0.6);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            backdrop-filter: blur(8px);
+        }
+
+        .metric-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1;
+            margin-bottom: 8px;
+            background: linear-gradient(120deg, #34d399, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-bright);
+            margin-bottom: 4px;
+        }
+
+        .metric-sub {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        /* Call To Action Bar */
+        .cta-section {
+            text-align: center;
+            padding: 40px 24px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+        }
+
+        .cta-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 12px;
+        }
+
+        .cta-text {
+            color: var(--text-body);
+            font-size: 0.95rem;
+            max-width: 500px;
+            margin: 0 auto 24px;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-decoration: none;
+            box-shadow: 0 8px 24px var(--emerald-glow);
+            transition: all 0.25s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(16, 185, 129, 0.4);
+            background: linear-gradient(135deg, #34d399, #10b981);
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border-subtle);
+            padding: 32px 24px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        footer strong {
+            color: var(--text-bright);
+        }
+    </style>
 </head>
 <body>
-<h1>CUSTOMER PROBLEM TEMPLATE</h1>
-<p><b>For:</b> Small business owner and market traders.</p>
-<p><b>Who has:</b> Problem with managing and keeping accurate daily sales, expenses and debt records.</p>
-<h2>LEDGER PAL</h2>
-<p><b>Is a:</b> Simple Mobile book-keeping app</p>
-<p><b>That:</b> Helps you record daily sales, track expense, know who is owning you, and see your profit without stress or accounting knowledge.</p>
-<p><b>Unlike:</b> Manuel notebooks and complicated accounting software like SAGE</p>
-<p><b>My product is:</b> Unique because it work offline, use Simple English, sends daily profit summary, and is built for non-accountants.</p>
-<p><b>We'll know this is true when:</b> Users can close their daily accounts in less than 5 minutes and 100 users report no more loss of money due to poor record keeping in 3 months.</p>
-<img src="LedgerPal.jpg" alt="LedgerPal logo">
+
+    <!-- Header / Navbar -->
+    <header>
+        <div class="nav-container">
+            <a href="#" class="logo-wrap">
+                <div class="logo-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                        <line x1="9" y1="7" x2="15" y2="7"></line>
+                        <line x1="9" y1="11" x2="15" y2="11"></line>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">Ledger<span>Pal</span></span>
+                    <span class="brand-tag">Smart Bookkeeping</span>
+                </div>
+            </a>
+
+            <div class="nav-badge">
+                <span class="pulse-dot"></span>
+                Customer Problem & Product Specification
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="pill-category">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+            Fintech Innovation for Emerging Markets
+        </div>
+
+        <h1>Bookkeeping made simple.<br><span class="highlight">Profit clarity in under 5 minutes.</span></h1>
+
+        <p class="hero-lead">
+            Built from the ground up for small business owners and market traders who want to record daily sales, manage customer debt, and secure their profit without accounting headaches.
+        </p>
+
+        <!-- Feature Chips -->
+        <div class="feature-chips">
+            <div class="chip">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                100% Offline Capable
+            </div>
+            <div class="chip">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Plain Everyday English
+            </div>
+            <div class="chip">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Zero Accounting Jargon
+            </div>
+            <div class="chip">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Daily Profit Briefings
+            </div>
+        </div>
+
+        <!-- Hero Showcase Card (LedgerPal Image) -->
+        <div class="hero-image-card">
+            <div class="hero-image-inner">
+                <img src="LedgerPal.jpg" alt="LedgerPal Product Showcase and Interface Overview">
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content Grid -->
+    <main>
+        <!-- Canvas Section -->
+        <div class="section-header">
+            <div class="section-tag">Value Proposition Canvas</div>
+            <h2 class="section-title">The Customer Problem & Product Blueprint</h2>
+        </div>
+
+        <div class="canvas-grid">
+            <!-- For Card -->
+            <div class="canvas-card col-6">
+                <div class="card-header">
+                    <div class="card-icon icon-target">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <circle cx="12" cy="12" r="6"></circle>
+                            <circle cx="12" cy="12" r="2"></circle>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="card-meta">Target Audience</div>
+                        <h3 class="card-heading">Who It's For</h3>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <strong>Small business owners and market traders.</strong> Merchants handling everyday fast-paced trade who need clear records without hiring expensive consultants.
+                </div>
+            </div>
+
+            <!-- Problem Card -->
+            <div class="canvas-card col-6">
+                <div class="card-header">
+                    <div class="card-icon icon-pain">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                            <line x1="12" y1="9" x2="12" y2="13"></line>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="card-meta">The Core Pain Point</div>
+                        <h3 class="card-heading">Who Has The Problem</h3>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <strong>Struggles with managing and keeping accurate records:</strong> Daily sales errors, untracked expenses, forgotten customer debts, and painful end-of-month reconciliations.
+                </div>
+            </div>
+
+            <!-- Solution Identity -->
+            <div class="canvas-card col-6">
+                <div class="card-header">
+                    <div class="card-icon icon-solution">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                            <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="card-meta">Solution Identity</div>
+                        <h3 class="card-heading">LedgerPal Is A</h3>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <strong>Simple mobile book-keeping app</strong> created specifically to fit right into your pocket and operate smoothly within daily trading workflows.
+                </div>
+            </div>
+
+            <!-- Product Power (That) -->
+            <div class="canvas-card col-6">
+                <div class="card-header">
+                    <div class="card-icon icon-power">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="card-meta">Core Capability</div>
+                        <h3 class="card-heading">That Helps You</h3>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <strong>Effortlessly record daily sales, track expenses, know exactly who is owing you</strong>, and view real-time profit numbers without any stress or accounting knowledge.
+                </div>
+            </div>
+
+            <!-- Unique Selling Proposition -->
+            <div class="canvas-card col-12">
+                <div class="card-header">
+                    <div class="card-icon icon-solution" style="background: rgba(52, 211, 153, 0.2);">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="card-meta">Competitive Edge</div>
+                        <h3 class="card-heading">Why LedgerPal Is Unique</h3>
+                    </div>
+                </div>
+                <div class="card-body">
+                    Our product stands out because it <strong>works completely offline</strong>, speaks in <strong>simple, friendly English</strong>, sends an <strong>instant daily profit summary</strong>, and is genuinely <strong>built for non-accountants</strong> who just want clarity over their money.
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison: Unlike Alternatives -->
+        <div class="comparison-section">
+            <div class="section-header">
+                <div class="section-tag">Market Differentiation</div>
+                <h2 class="section-title">Unlike the Old Ways</h2>
+            </div>
+
+            <div class="comparison-grid">
+                <!-- Legacy Ways -->
+                <div class="comparison-card legacy">
+                    <div class="comparison-title">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="15" y1="9" x2="9" y2="15"></line>
+                            <line x1="9" y1="9" x2="15" y2="15"></line>
+                        </svg>
+                        Manual Books & Bloated Software
+                    </div>
+                    <ul class="comparison-list">
+                        <li>
+                            <span class="bullet-icon">❌</span>
+                            <span><strong>Manual Notebooks:</strong> Vulnerable to spills, misplacement, and hours of tedious end-of-day calculator math.</span>
+                        </li>
+                        <li>
+                            <span class="bullet-icon">❌</span>
+                            <span><strong>Complicated Tools (like SAGE):</strong> Expensive licenses, confusing debit/credit terms, and heavy training requirements.</span>
+                        </li>
+                        <li>
+                            <span class="bullet-icon">❌</span>
+                            <span><strong>Uncollected Debts:</strong> Customer credit forgotten or lost in unreadable scribbles.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- LedgerPal Way -->
+                <div class="comparison-card ledgerpal">
+                    <div class="comparison-title">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="9 12 11 14 15 10"></polyline>
+                        </svg>
+                        The LedgerPal Experience
+                    </div>
+                    <ul class="comparison-list">
+                        <li>
+                            <span class="bullet-icon">✅</span>
+                            <span><strong>Zero Accounting Terms:</strong> No complicated debits or balance sheets. Just money in, money out, and clear profit.</span>
+                        </li>
+                        <li>
+                            <span class="bullet-icon">✅</span>
+                            <span><strong>Instant Debt Radar:</strong> Never lose track of who owes you money with automated friendly reminders.</span>
+                        </li>
+                        <li>
+                            <span class="bullet-icon">✅</span>
+                            <span><strong>Zero Connectivity Dependence:</strong> Full offline reliability so your business never stops during network downtime.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Criteria / Validation Metrics -->
+        <div class="metrics-banner">
+            <div class="metrics-headline">
+                <div class="section-tag">Validation Metric</div>
+                <h3>We'll Know This Is True When</h3>
+                <p>Measurable benchmarks confirming LedgerPal has solved real financial challenges for our users.</p>
+            </div>
+
+            <div class="metrics-row">
+                <div class="metric-box">
+                    <div class="metric-number">&lt; 5m</div>
+                    <div class="metric-label">Daily Account Closure</div>
+                    <div class="metric-sub">Users finish their daily balancing in under five minutes.</div>
+                </div>
+
+                <div class="metric-box">
+                    <div class="metric-number">100+</div>
+                    <div class="metric-label">Active Traders Protected</div>
+                    <div class="metric-sub">Report zero financial loss from poor records in 3 months.</div>
+                </div>
+
+                <div class="metric-box">
+                    <div class="metric-number">100%</div>
+                    <div class="metric-label">Offline Reliability</div>
+                    <div class="metric-sub">Zero lost transactions regardless of local signal strength.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Action Card -->
+        <div class="cta-section">
+            <h3 class="cta-title">Ready to take control of your business numbers?</h3>
+            <p class="cta-text">Experience effortless bookkeeping designed specifically for everyday trading success.</p>
+            <button class="btn-primary" onclick="alert('LedgerPal Prototype: Ready for trader onboarding!')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14"></path>
+                    <path d="M12 5l7 7-7 7"></path>
+                </svg>
+                Explore LedgerPal Demo
+            </button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 <strong>LedgerPal</strong> &bull; Customer Problem Template &amp; Product Specification &bull; Built for Small Business Owners &amp; Market Traders</p>
+    </footer>
+
 </body>
 </html>
